@@ -1035,18 +1035,26 @@ var modals = function modals() {
 
   var showModalByTime = function showModalByTime(modalSelector, timeout) {
     var scrollWidth = Object(_calcScrollWidth__WEBPACK_IMPORTED_MODULE_1__["default"])(),
-        modal = document.querySelector(modalSelector);
+        allModals = document.querySelectorAll("[data-modal");
     setTimeout(function () {
-      modal.style.display = "block";
-      document.body.style.overflow = "hidden";
-      document.body.style.marginRight = "".concat(scrollWidth, "px");
+      var isDisplay;
+      allModals.forEach(function (item) {
+        if (getComputedStyle(item).display != "none") {
+          isDisplay = true;
+        }
+      });
+
+      if (!isDisplay) {
+        document.querySelector(modalSelector).style.display = "block";
+        document.body.style.overflow = "hidden";
+        document.body.style.marginRight = "".concat(scrollWidth, "px");
+      }
     }, timeout);
   };
 
   bindModals(".button-design", ".popup-design", ".popup-design .popup-close");
   bindModals(".button-consultation", ".popup-consultation", ".popup-consultation .popup-close");
-  bindModals(".fixed-gift", ".popup-gift", ".popup-gift .popup-close");
-  showModalByTime(".popup-consultation", 5000);
+  bindModals(".fixed-gift", ".popup-gift", ".popup-gift .popup-close"); // showModalByTime(".popup-consultation", 60000);
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (modals);

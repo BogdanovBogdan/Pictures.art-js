@@ -29,12 +29,23 @@ const modals = () => {
 	}
 
 	const showModalByTime = (modalSelector, timeout) => {
-		let scrollWidth = calcScroll(),
-			modal = document.querySelector(modalSelector);
+		const scrollWidth = calcScroll(),
+			allModals = document.querySelectorAll("[data-modal");
+
 		setTimeout(() => {
-			modal.style.display = "block";
-			document.body.style.overflow = "hidden";
-			document.body.style.marginRight = `${scrollWidth}px`;
+			let isDisplay;
+			
+			allModals.forEach(item => {
+				if (getComputedStyle(item).display != "none") {
+					isDisplay = true;
+				}
+			});
+
+			if (!isDisplay) {
+				document.querySelector(modalSelector).style.display = "block";
+				document.body.style.overflow = "hidden";
+				document.body.style.marginRight = `${scrollWidth}px`;
+			}
 		}, timeout);
 	};
 	
@@ -42,7 +53,7 @@ const modals = () => {
 	bindModals(".button-design", ".popup-design", ".popup-design .popup-close");
 	bindModals(".button-consultation", ".popup-consultation", ".popup-consultation .popup-close");
 	bindModals(".fixed-gift", ".popup-gift", ".popup-gift .popup-close");
-	showModalByTime(".popup-consultation", 5000);
+	// showModalByTime(".popup-consultation", 60000);
 };
 
 
