@@ -2,14 +2,30 @@ import calcScroll from "./calcScrollWidth";
 import closeModals from "./closeModals";
 
 const modals = () => {
-	const bindModals = (triggerSelector, modalSelector, closeSelector, closeOnClickOnOverlay = true, displayModal = "block") => {
+	let btnPressed = false;
+	const bindModals = (triggerSelector, modalSelector, closeSelector, destroyTrigger = false, displayModal = "block") => {
 		const triggers = document.querySelectorAll(triggerSelector),
 			modal = document.querySelector(modalSelector),
 			close = document.querySelector(closeSelector),
+			allModals = document.querySelectorAll("[data-modal]"),
 			scrollWidth = calcScroll();
 
+		allModals.forEach(item => {
+			item.classList.add("animated", "fadeIn");
+		});
+
 		triggers.forEach(item => {
-			item.addEventListener("click", () => {
+			item.addEventListener("click", (e) => {
+				if (e.trigger) {
+					e.preventDefault();
+				}
+				
+				btnPressed = true;
+				 
+				if (destroyTrigger) {
+					item.remove();
+				}
+				
 				modal.style.display = displayModal;
 				document.body.style.overflow = "hidden";
 				document.body.style.marginRight = `${scrollWidth}px`;
@@ -21,9 +37,9 @@ const modals = () => {
 		});
 
 		modal.addEventListener("click", (e) => {
-			if (e.target && closeOnClickOnOverlay && e.target == modal) {
+			if (e.target && e.target == modal) {
 				closeModals()
-			}; 
+			};
 		});
 
 	}
@@ -34,7 +50,7 @@ const modals = () => {
 
 		setTimeout(() => {
 			let isDisplay;
-			
+
 			allModals.forEach(item => {
 				if (getComputedStyle(item).display != "none") {
 					isDisplay = true;
@@ -48,12 +64,29 @@ const modals = () => {
 			}
 		}, timeout);
 	};
-	
+
+	const showModalByEndPage = (modalSelector) => {
+		let isOpened = false;
+
+		window.addEventListener("scroll", () => {
+			let scrollHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+
+			if (!isOpened && !btnPressed && pageYOffset + document.documentElement.clientHeight >= scrollHeight) {
+				document.querySelector(modalSelector).click();
+				isOpened = true;
+			};
+			
+			
+		});
+
+	}
+
 
 	bindModals(".button-design", ".popup-design", ".popup-design .popup-close");
 	bindModals(".button-consultation", ".popup-consultation", ".popup-consultation .popup-close");
-	bindModals(".fixed-gift", ".popup-gift", ".popup-gift .popup-close");
+	bindModals(".fixed-gift", ".popup-gift", ".popup-gift .popup-close", true);
 	// showModalByTime(".popup-consultation", 60000);
+	showModalByEndPage(".fixed-gift");
 };
 
 

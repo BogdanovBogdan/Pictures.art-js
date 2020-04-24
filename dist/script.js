@@ -1007,15 +1007,31 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var modals = function modals() {
+  var btnPressed = false;
+
   var bindModals = function bindModals(triggerSelector, modalSelector, closeSelector) {
-    var closeOnClickOnOverlay = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+    var destroyTrigger = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
     var displayModal = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : "block";
     var triggers = document.querySelectorAll(triggerSelector),
         modal = document.querySelector(modalSelector),
         close = document.querySelector(closeSelector),
+        allModals = document.querySelectorAll("[data-modal]"),
         scrollWidth = Object(_calcScrollWidth__WEBPACK_IMPORTED_MODULE_1__["default"])();
+    allModals.forEach(function (item) {
+      item.classList.add("animated", "fadeIn");
+    });
     triggers.forEach(function (item) {
-      item.addEventListener("click", function () {
+      item.addEventListener("click", function (e) {
+        if (e.trigger) {
+          e.preventDefault();
+        }
+
+        btnPressed = true;
+
+        if (destroyTrigger) {
+          item.remove();
+        }
+
         modal.style.display = displayModal;
         document.body.style.overflow = "hidden";
         document.body.style.marginRight = "".concat(scrollWidth, "px");
@@ -1025,7 +1041,7 @@ var modals = function modals() {
       Object(_closeModals__WEBPACK_IMPORTED_MODULE_2__["default"])();
     });
     modal.addEventListener("click", function (e) {
-      if (e.target && closeOnClickOnOverlay && e.target == modal) {
+      if (e.target && e.target == modal) {
         Object(_closeModals__WEBPACK_IMPORTED_MODULE_2__["default"])();
       }
 
@@ -1052,9 +1068,25 @@ var modals = function modals() {
     }, timeout);
   };
 
+  var showModalByEndPage = function showModalByEndPage(modalSelector) {
+    var isOpened = false;
+    window.addEventListener("scroll", function () {
+      var scrollHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+
+      if (!isOpened && !btnPressed && pageYOffset + document.documentElement.clientHeight >= scrollHeight) {
+        document.querySelector(modalSelector).click();
+        isOpened = true;
+      }
+
+      ;
+    });
+  };
+
   bindModals(".button-design", ".popup-design", ".popup-design .popup-close");
   bindModals(".button-consultation", ".popup-consultation", ".popup-consultation .popup-close");
-  bindModals(".fixed-gift", ".popup-gift", ".popup-gift .popup-close"); // showModalByTime(".popup-consultation", 60000);
+  bindModals(".fixed-gift", ".popup-gift", ".popup-gift .popup-close", true); // showModalByTime(".popup-consultation", 60000);
+
+  showModalByEndPage(".fixed-gift");
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (modals);
