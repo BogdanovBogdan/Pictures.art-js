@@ -85,7 +85,7 @@ const modals = () => {
 	bindModals(".button-design", ".popup-design", ".popup-design .popup-close");
 	bindModals(".button-consultation", ".popup-consultation", ".popup-consultation .popup-close");
 	bindModals(".fixed-gift", ".popup-gift", ".popup-gift .popup-close", true);
-	// showModalByTime(".popup-consultation", 60000);
+	showModalByTime(".popup-consultation", 60000);
 	showModalByEndPage(".fixed-gift");
 };
 
