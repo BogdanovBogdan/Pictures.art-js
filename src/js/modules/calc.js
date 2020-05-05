@@ -11,9 +11,7 @@ const calc = (sizeSelector, materialSelector, optionsSelector, promoSelector, re
 		
 		sum = Math.round(+size.value * +material.value + +options.value); 
 		
-		console.log('size.value = ', Boolean(size.value));
 		if (!size.value || !material.value) {
-			console.log('result = ', result);
 			result.textContent = "Пожалуйста, выберите размер и материал картины";
 		} else if (promo.value === "IWANTPOPART") {
 			result.textContent = sum * 0.7;
