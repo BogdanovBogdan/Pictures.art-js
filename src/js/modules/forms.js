@@ -1,3 +1,5 @@
+import {postData} from "../services/requests";
+
 const forms = () => {
 	const forms = document.querySelectorAll("form"),
 		inputs = document.querySelectorAll("input"),	 
@@ -43,13 +45,7 @@ const forms = () => {
 		failureImg: "assets/img/fail.png"
 	}
 
-	async function postData(url, data) {
-		let res = await fetch(url, {
-			method: "post",
-			body: data
-		});
-		return await res.text();
-	};
+	
 
 	forms.forEach(form => {
 		form.addEventListener("submit", (e) => {
