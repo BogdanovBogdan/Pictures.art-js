@@ -69,13 +69,17 @@ const forms = () => {
 			textMessage.textContent = message.loading;
 			statusMessage.appendChild(textMessage);
 
-			const fromData = new FormData(form);
+			const formData = new FormData(form);
+			if (form.classList.contains("calc_form")) {
+				formData.append("price", form.querySelector(".calc-price").innerHTML);
+			};
+			
 			let api;
 			form.closest(".popup-design") || form.classList.contains("calc_form") ? api = path.designer : api = path.question;
 			console.log(api);
 			
 
-			postData(api, fromData)
+			postData(api, formData)
 				.then(res => {
 					console.log('forms:postData[res] = ', res);
 					imgMessage.setAttribute("src", message.successImg);
