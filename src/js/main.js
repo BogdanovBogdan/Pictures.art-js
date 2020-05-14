@@ -10,6 +10,7 @@ import sizesPicture from "./modules/sizesPicture";
 import accordion from "./modules/accordion";
 import burger from "./modules/burger";
 import scrollToAnchors from "./modules/scrollToAnchors";
+import dragAndDrop from "./modules/dragAndDrop";
 
 window.addEventListener("DOMContentLoaded", () => {
 	"use strict";
@@ -28,4 +29,5 @@ window.addEventListener("DOMContentLoaded", () => {
 	accordion();
 	burger(".burger-menu", ".burger");
 	scrollToAnchors();
+	dragAndDrop();
 });
