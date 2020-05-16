@@ -1,3 +1,5 @@
+import { postData } from "../services/requests";
+
 const dragAndDrop = () => {
 	const fileInputs = document.querySelectorAll("[name='upload']");
 
@@ -23,6 +25,23 @@ const dragAndDrop = () => {
 		uploadArea.style.background = "transparent";
 	}
 
+	const postOnDrop = inputItem => {
+		let formData = new FormData();
+		formData.append('file', inputItem.files[0]);
+
+		postData("assets/server.php", formData)
+			.then(res => {
+				console.log('\nSuccess POST [DragAndDrop]\n', res);
+				alert('Фотография загружена и отправлена, спасибо');
+			})
+			.catch(() => {
+				console.log('\nFailure POST [DragAndDrop]\n')
+				alert('Ошибка при отправке формы фото, повторите позже');
+				
+			})
+			.finally(() => inputItem.previousElementSibling.textContent = "Файл не выбран");
+	}
+
 	["dragenter", "dragover"].forEach(eventName => {
 		fileInputs.forEach(input => {
 			input.addEventListener(eventName, () => highligh(input.closest(".file_upload")));
@@ -44,7 +63,15 @@ const dragAndDrop = () => {
 			fullName[0].length > 6 ? dots = "..." : dots = ".";
 			let shortName = fullName[0].substring(0, 6) + dots + fullName[1];
 			input.previousElementSibling.textContent = shortName;
+			
+			if (input.closest(".main")) {
+				postOnDrop(input);
+			}
 		})
+	});
+
+	document.querySelector(".main input[name='upload']").addEventListener("change", function() {
+		postOnDrop(this);
 	});
 };
 

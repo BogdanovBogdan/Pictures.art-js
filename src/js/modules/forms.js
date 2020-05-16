@@ -81,7 +81,7 @@ const forms = () => {
 
 			postData(api, formData)
 				.then(res => {
-					console.log('forms:postData[res] = ', res);
+					console.log('\nSuccess POST [form]\n', res);
 					imgMessage.setAttribute("src", message.successImg);
 					textMessage.textContent = message.success;
 				})
