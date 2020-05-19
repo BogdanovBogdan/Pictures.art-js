@@ -2,12 +2,16 @@ const mask = (selector) => {
 
 	const setCursorPosition = (pos, elem) => {
 		elem.focus();
-		
+
 		if (elem.setSelectionRange) {
-			elem.setSelectionRange(pos, pos);
+			if (elem.selectionStart < 3) {
+				elem.setSelectionRange(pos, pos);
+			} else {
+				elem.setSelectionRange(pos, pos);
+			}
 		} else if (elem.createTextRange) {
 			let range = elem.createTextRange();
-			
+
 			range.collapse(true);
 			range.moveEnd("character", pos);
 			range.moveStart("character", pos);
@@ -31,9 +35,7 @@ const mask = (selector) => {
 		});
 
 		if (event.type === "blur") {
-			if (this.value.length == 2) {
-				this.value = '';
-			}
+			if (this.value.length == 2) this.value = '';
 		} else {
 			setCursorPosition(this.value.length, this);
 		}
@@ -43,9 +45,15 @@ const mask = (selector) => {
 	let inputs = document.querySelectorAll(selector);
 
 	inputs.forEach(input => {
-		input.addEventListener("input", createMask);
-		input.addEventListener("focus", createMask);
-		input.addEventListener("blur", createMask);
+		["input", "focus", "blur"].forEach(evenName => {
+			input.addEventListener(evenName, createMask);
+		});
+
+		["click", "keyup"].forEach(eventName => {
+			input.addEventListener(eventName, function () {
+				setCursorPosition(this.value.length, this);
+			});
+		});
 	});
 };
 
