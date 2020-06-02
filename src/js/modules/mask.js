@@ -4,11 +4,7 @@ const mask = (selector) => {
 		elem.focus();
 
 		if (elem.setSelectionRange) {
-			if (elem.selectionStart < 3) {
-				elem.setSelectionRange(pos, pos);
-			} else {
-				elem.setSelectionRange(pos, pos);
-			}
+			elem.setSelectionRange(pos, pos);
 		} else if (elem.createTextRange) {
 			let range = elem.createTextRange();
 
@@ -48,11 +44,9 @@ const mask = (selector) => {
 		["input", "focus", "blur"].forEach(evenName => {
 			input.addEventListener(evenName, createMask);
 		});
-
+		
 		["click", "keyup"].forEach(eventName => {
-			input.addEventListener(eventName, function () {
-				setCursorPosition(this.value.length, this);
-			});
+			input.addEventListener(eventName, function() {setCursorPosition(this.value.length, this)});
 		});
 	});
 };
